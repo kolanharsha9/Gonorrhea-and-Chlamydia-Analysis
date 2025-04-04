@@ -9,8 +9,9 @@ import numpy as np
 import dash_bootstrap_components as dbc
 
 
-my_app = dash.Dash('My app')
-my_app.layout = html.Div([html.H1(children='Gonorrhea and Chlamydia Analysis',
+app = dash.Dash('My app')
+server = app.server
+app.layout = html.Div([html.H1(children='Gonorrhea and Chlamydia Analysis',
                                   style={'textAlign':'center'}),
 
                           html.Br(),
@@ -53,7 +54,7 @@ tab1_layout=html.Div([
         ])
 
 # Callback for downloading the CSV file
-@my_app.callback(
+@app.callback(
     Output("download-dataframe-csv", "data"),
     Input("btn_csv", "n_clicks"),
     prevent_initial_call=True,
@@ -102,7 +103,7 @@ for selected_column in numerical_columns:
 
     # Filter out outliers
     cleaned_df = df2[(df1[selected_column] >= lower_bound) & (df2[selected_column] <= upper_bound)]
-@my_app.callback(
+@app.callback(
     Output('plot-container', 'children'),
     [Input('column-dropdown', 'value'),
      Input('plot-type', 'value')]
@@ -170,7 +171,7 @@ tab3_layout=html.Div([
 ])
 
 # Define callback to update the graph
-@my_app.callback(
+@app.callback(
     Output('graph-3', 'figure'),
     [Input('continuous-dropdown', 'value'),
      Input('discrete-dropdown', 'value'),
@@ -246,7 +247,7 @@ tab4_layout = html.Div([
 ])
 
 # Callback function to update choropleth map
-@my_app.callback(
+@app.callback(
     Output('choropleth-map', 'figure'),
     [
         Input('indicator-dropdown', 'value'),
@@ -299,7 +300,7 @@ tab5_layout = html.Div([
 ])
 
 
-@my_app.callback(
+@app.callback(
     Output('multi-demographic-pie-charts', 'children'),
     [Input('disease-dropdown-tab5', 'value'),
      Input('demographic-multiselect-tab5', 'value')]
@@ -340,7 +341,7 @@ tab6_layout = html.Div([
 
     dcc.Graph(id='temporal-line-chart', style={'width': '100%', 'height': '600px'})
 ])
-@my_app.callback(
+@app.callback(
     Output('temporal-line-chart', 'figure'),
     [Input('yaxis-switch-tab6', 'on')]
 )
@@ -368,7 +369,7 @@ def update_temporal_plot(toggle_state):
 
 
 
-@my_app.callback(
+@app.callback(
     Output(component_id='layout',component_property='children'),
     Input(component_id='tabs',component_property='value')
 )
@@ -389,4 +390,4 @@ def update_layout(tabs):
 
 
 if __name__ == '__main__':
-    my_app.run_server()
+    app.run_server()
