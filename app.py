@@ -389,7 +389,5 @@ def update_layout(tabs):
 
 
 
-app.run_server(
-    port=8033,
-    host='0.0.0.0'
-)
+if __name__ == '__main__':
+    app.run_server(debug=False)
